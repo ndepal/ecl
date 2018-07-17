@@ -788,6 +788,8 @@ void Ekf::fuseHeading()
 		// apply the state corrections
 		fuse(Kfusion, _heading_innov);
 
+		_time_last_mag_fuse = _time_last_imu;
+
 	}
 }
 

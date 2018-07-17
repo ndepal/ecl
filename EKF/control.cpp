@@ -1503,6 +1503,20 @@ void Ekf::controlMagFusion()
 			// do no fusion at all
 		}
 	}
+
+	static bool last_timeout = false;
+	if (_time_last_imu - _time_last_mag_fuse > _params.no_aid_timeout_max) {
+		if (!last_timeout) {
+			PX4_WARN("hdg timeout");
+			last_timeout = true;
+		}
+		_fault_status.flags.bad_mag_hdg = true;
+	} else {
+		if (last_timeout) {
+			PX4_WARN("no more hdg timeout");
+			last_timeout = false;
+		}
+	}
 }
 
 void Ekf::controlVelPosFusion()
